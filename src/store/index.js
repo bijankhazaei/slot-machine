@@ -5,7 +5,6 @@ export default createStore( {
 	state: {
 		userCredit: 10,
 		userBalance: 0,
-		gameCredit: 0,
 		gameStatus: {
 			itemOneState: 0,
 			itemTwoState: 0,
