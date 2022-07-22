@@ -20,14 +20,23 @@ let itemOne = computed( () => store.state.items[ 0 ] );
 let itemTwo = computed( () => store.state.items[ 1 ] );
 let itemThree = computed( () => store.state.items[ 2 ] );
 
+/**
+ * dispatch the game start action
+ */
 function startGame() {
   store.dispatch( 'startGame' );
 }
 
+/**
+ * dispatch the game check out action
+ */
 function checkout() {
   store.dispatch( 'checkout' );
 }
 
+/**
+ * dispatch the game check out chance action
+ */
 function checkoutChance() {
   store.dispatch( 'checkoutChance' );
 }

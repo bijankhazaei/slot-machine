@@ -13,6 +13,7 @@ export default createStore( {
 		},
 		gameCheckOutClass: '',
 		gameCheckOutDisabled: false,
+
 		carts: [
 			{
 				id: 1,
@@ -39,6 +40,7 @@ export default createStore( {
 				credits: 40,
 			},
 		],
+
 		items: [
 			{
 				id: 1,
@@ -61,22 +63,24 @@ export default createStore( {
 		],
 	},
 	mutations: {
-		gameLoading: function( state ) {
+		/**
+		 * Mutate Game status
+		 * @param state
+		 * @param payload
+		 */
+		gameStatusMutate: function( state, payload ) {
 			state.gameStatus = {
-				itemOneState: 1,
-				itemTwoState: 1,
-				itemThreeState: 1,
+				itemOneState: payload.status,
+				itemTwoState: payload.status,
+				itemThreeState: payload.status,
 			};
 		},
 
-		gameReady: function( state ) {
-			state.gameStatus = {
-				itemOneState: 0,
-				itemTwoState: 0,
-				itemThreeState: 0,
-			};
-		},
-
+		/**
+		 * Mutate random or cheated items
+		 * @param state
+		 * @param payload
+		 */
 		randomizeGame: function( state, payload ) {
 			let result = payload.cheating ?
 				Helper.getNotRandomItems( state.carts, 3, state.userCredit ) :
@@ -104,6 +108,11 @@ export default createStore( {
 
 		},
 
+		/**
+		 * Mutate game check out chance
+		 * @param state
+		 * @param payload
+		 */
 		changeCheckoutChance: function( state, payload ) {
 			console.log( payload );
 			if ( payload.move ) {
@@ -129,6 +138,10 @@ export default createStore( {
 			}
 		},
 
+		/**
+		 * Mutate game balance
+		 * @param state
+		 */
 		checkout: function( state ) {
 			if ( ! state.gameCheckOutDisabled && state.userCredit > 10 ) {
 				state.userBalance += state.userCredit;
@@ -138,18 +151,30 @@ export default createStore( {
 		},
 	},
 	actions: {
+		/**
+		 * Action Game start
+		 * @param commit
+		 */
 		startGame( {commit} ) {
-			commit( 'gameLoading' );
+			commit( 'gameStatusMutate', {status: 1} );
 			setTimeout( () => {
 				commit( 'randomizeGame', {cheating: this.state.userCredit >= 40} );
 			}, 500 );
 		},
 
+		/**
+		 * Action Game check out
+		 * @param commit
+		 */
 		checkout( {commit} ) {
 			commit( 'checkout' );
-			commit( 'gameReady' );
+			commit( 'gameStatusMutate', {status: 0} );
 		},
 
+		/**
+		 * Action Game check out chance
+		 * @param commit
+		 */
 		checkoutChance( {commit} ) {
 			const chanceForCheckout = Math.random();
 			console.log( chanceForCheckout );
